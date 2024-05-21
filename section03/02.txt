@@ -1,0 +1,59 @@
+
+JSX 장점
+
+    1. 코드가 간결해진다 ex)
+
+        JSX 사용함 :
+            <div>Hello, {name}</div>
+
+        JSX 사용 안함 :
+            React.createElement('div', null, `Hello, ${name}`)
+            -->  앞에서 배운 것처럼 type, props, children 의 파라미터를 사용하는 것을 볼 수 있다
+
+
+    2. 가독성이 향상된다 : 위의 예제코드를 다시 봐보면 JSX 코드를 사용한 것이 의미가 훨씬 더 빠르게 와닫는 것을 확인할 수 있다
+
+    
+    3. Injection Attacks 라고 하는 해킹 방법을 방어한다 : 보안성이 올라간다
+
+        --> Injection Attacks : 입력창에 문자나 숫자 같은 일반적인 값이 아닌, 소스코드를 입력하여 해당 코드가 실행되도록 하는 해킹 방법
+        --> ex) 아이디를 입력하는 입력창에 자바스크립트 코드를 입력하였는데, 그 코드가 그대로 실행되어 버리는 문제
+
+        예제 코드)
+            // 이 코드는 안전하지 않습니다. (보안 위험성이 있음)
+            const title = response.potentiallyMaliciousInput;
+
+            // 이 코드는 안전합니다.
+            const element = <h1>{title}</h1>
+            --> React DOM 은 임베딩 하기 전에, 임베딩 된 값을 모두 문자열로 변환한다. 그렇기에 명시적으로 선언되지 않은 값은 괄호 사이에 들어갈 수 없다
+                    결과적으로 XSS 라고 하는 cross side script attack 을 방어할 수 있다
+                    --> 잠재적인 보안 위협을 줄일 수 있다
+
+
+JSX 사용법 : JavaScript 코드 + XML / HTML
+
+    XML, HTML 코드를 쓰다가 중간에 자바스크립트 코드를 쓰고 싶다면 중괄호로 묶어서 사용해주면 된다
+    ex) ... XML / HTML 코드 {JavaScript 코드} ... XML / HTML 코드
+    --> 이렇게 중괄호로 묶어서 자바스크립트 변수나 함수 등을 사용할 수 있다
+            
+    HTML 태그 중간이 아닌, 태그의 속성에 값을 넣고 싶을 대는 어떻게 해야 할까? :
+
+    1. 큰따옴표 사이에 문자열을 넣는 방법:
+        const element = <div tanIndex="0"></div>;
+
+    2. 중괄호 사이에 자바스크립트 코드를 넣는 방법:
+        const element = <img src={user.avatarUrl}></img>
+
+    --> 결론은 JSX 에서는 "중괄호를 사용하면 무조건 자바스크립트 코드가 들어간다" 라고 외워두면 좋다
+
+
+JSX 사용해서 children 정의하는 방법 :
+    const element = (
+        <div>
+            <h1>안녕하세요</h1>
+            <h2>열심히 리액트 공부해 봅시다!</h2>
+        </div>
+    )
+
+    --> 평소 HTML 코드를 작성하듯이 상위태그가 하위태그를 둘러싸도록 하면 자연스럽게 children 이 정의된다
+    --> 그냥 HTML 코드 작성하듯이 작성하면 된다 (굉장히 간결하고 직관적이고 가독성이 좋다)

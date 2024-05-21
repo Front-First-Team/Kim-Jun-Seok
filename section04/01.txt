@@ -1,0 +1,146 @@
+
+Element 란 무엇인가?
+
+    어떤 물체를 구성하는 성분
+    Element 는 리액트 앱을 구성하는 가장 작은 블럭들
+
+    React Element 와 Dom Element 는 어떤 차이가 있을까?
+    --> React Element 는 Dom Element 의 가상 표현이라고 볼 수 있다 (리액트는 Virtual Dom 을 사용한다)
+
+    앞에서 한 것으로 예시를 들어보자 ex)
+        const element = <h1>Hello, world</h1>
+        --> 대입 연산자의 왼쪽 부분이 나오는 변수 이름이 element로 되어있는 것을 볼 수 있다
+               이 코드가 실행될 때, 대입연산자의 오른쪽 부분은 리액트의 createElement 함수를 사용하여 element를 생성하게 된다
+               이렇게 생성된 것이 리액트의 element 가 되는 것이다.
+               --> 리액트는 이 element 를 이용해서 실제 우리가 화면에서 보게될 DOM Element 를 생성한다
+
+
+React Element 생김새 : 자바스크립트 객체 형태로 존재한다 (이 객체는 한번 생성되면 바꿀 수 없다 -> 불변성을 갖고 있다)
+ex)
+    {
+        type: 'button',
+        props: {
+            className: 'bg-green',
+            children: {
+                type: 'b',
+                props: {
+                    children: 'Hello, element!'
+                }
+            }
+        }
+    }
+
+위 Element 가 실제로 렌더링이 된다면 밑의 코드처럼 DOM Element 가 된다
+ex)
+    <button class='bg-green'>
+        <b>
+            Hello, element!
+        </b>
+    </button>
+
+----------------------------------------------------------------------------------------
+
+그렇다면 Element 타입에 HTML 태그 이름이 문자열로 들어가는 것이 아닌 경우에는 어떻게 될까?
+밑의 코드를 확인해보자
+
+ex)
+    {
+        type: Button,
+        props: {
+            color: 'green',
+            children: 'Hello, element!'
+        }
+    }
+--> 위 코드를 확인해보면 type에 문자열로된 HTML 태그가 아닌, 리액트 컴포넌트의 이름이 들어갔다
+--> 이처럼 React Element 는 자바스크립트의 객체 형태로 존재한다, 그리고 이러한 객체를 만드는 역할을 하는 것이 바로 createElement 함수이다
+--> createElement 함수를 호출할 때는 type, props, children 이라고 하는 세가지의 파라미터를 넣는다
+ex)
+    React.createElement (
+        type,  //-->  여기에는 html 태그 이름이 문자열로 들어가거나, 또다른 리액트 컴포넌트가 들어가게 된다  ex> Button 컴포넌트 함수
+        [props],  //-->  element 속성이 들어간다  ex> class, style ... 등등
+        [...children]  //-->  해당 element 의 자식 element 들이 들어간다
+    )
+
+
+----------------------------------------------------------------------------------------
+
+
+실제로 createElement 함수가 동작하는 과정을 코드와 함께 살펴보자
+
+ex)
+    function Button(props) {
+        return (
+            <button className={`bg-${props.color}`}>
+                <b>
+                    {props.children}
+                </b>
+            </button>
+        )
+    }
+
+    function ConfirmDialog(props) {
+        return (
+            <div>
+                <p>내용을 확인하셨으면 확인 버튼을 눌러주세요.</p>
+                <Button color='green'>확인</Button>
+            </div>
+        )
+    }
+
+    --> ConfirmDialog 컴포넌트가 Button 컴포넌트를 포함하고 있는 것을 확인할 수 있다
+    --> ConfirmDialog 컴포넌트의 Element 는 어떤 모습이 될지 밑의 코드를 확인해보자
+
+    {
+        type: 'div',
+        props: {
+            children: [
+                {
+                    type: 'p',
+                    props: {
+                        children: '내용을 확인하셨으면 확인 버튼을 눌러주세요'
+                    }
+                },
+                {
+                    type: Button,
+                    props: {
+                        color: 'green',
+                        children: '확인'
+                    }
+                }
+            ]
+        }
+    }
+
+    --> 첫번째 children 의 타입이 HTML 태그의 p 태그이기 때문에 곧바로 랜더링이 될 수 있는 상태이다
+    --> 하지만, 두번째 children 은 타입은 HTML 태그가 아니라 React Component 의 이름인 Button 컴포넌트 함수이다
+    --> 이 경우에는 리액트는 Button 컴포넌트의 Element 를 생성해서 합치게 된다
+    --> 최종적으로 Element 는 밑의 코드와 같은 모습이 되는 것이다
+
+        {
+        type: 'div',
+        props: {
+            children: [
+                {
+                    type: 'p',
+                    props: {
+                        children: '내용을 확인하셨으면 확인 버튼을 눌러주세요'
+                    }
+                },
+                {
+                    type: 'button',
+                    props: {
+                        className: 'bg-green',
+                        children: {
+                            type: 'b',
+                            props: {
+                                children: '확인'
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+
+    --> 이처럼 컴포넌트 렌더링을 위해서 모든 컴포넌트가 createElement 함수를 통해 Element 로 변환된다는 것을 확인할 수 있다
+

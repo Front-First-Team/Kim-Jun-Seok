@@ -1,0 +1,57 @@
+
+JSX : 자바스크립트의 확장 문법 (JS 는 자바스크립트를 의미)
+        --> JavaScript + XML / HTML
+
+JSX 코드 예시 :
+    const element = <h1>Hello, world!</h1>;
+    --> 자바스크립트 코드와 HTML 코드가 합쳐있는 JSX 코드가 되는 것이다
+
+JSX 역할 : 내부적으로 XML HTML 코드를 자바스크립트로 변환하는 과정을 거치게 된다
+                --> 그렇기 때문에 실제로 우리가 JSX 코드를 작성해도, 최종적으로는 JavaScript 코드가 나오게 되는 것이다
+
+                --> JSX 코드를 JavaScript 코드로 변환하는 역할을 하는 것이 React.createElement() 하는 함수이다
+
+ex)
+JSX를 사용한 코드 :
+    const element = (
+        <h1 className = "greeting">
+            Hello, world!
+        </h1>
+    )
+
+JSX를 사용하지 않은 코드 :
+    const element = React.createElement(
+        'h1',
+        {className: 'greeting'},
+        'Hello, world!'
+    )
+
+--> 위 두개의 코드는 모두 동일한 역할을 한다. JSX를 사용한 코드도 내부적으로 createElement 함수를 사용하도록 변환되기 때문이다
+--> 그리고 이 createElement 함수 호출의 결과로 밑의 코드와 같은 자바스크립트 객체가 나오게 된다
+
+const element = {
+    type: 'h1',
+    props: {
+        className: 'greeting',
+        children: 'Hello, world!'
+    }
+}
+
+--> React는 이 객체들을 읽어서 DOM 을 만드는 데 사용하고, 항상 최신상태로 유지한다. React 에서는 이 객체를 element 라고 한다
+
+createElement 함수의 파라미터(인자) 로는 어떤 것이 들어갈까? :
+
+React.createElement(
+    type,
+    [props],
+    [...children]
+)
+
+첫번째 파라미터 type 은 element 유형을 나타낸다  -->  ex) <div>, <span>...
+props 는 속성들이 들어간다
+children 은 현재 element 가 포함하고 있는 자식 element 라고 보면 된다
+
+---------------------------
+
+React 에서 JSX 를 끄는 것이 필수는 아니다  -->  왜냐하면 직접 모든 코드를 createElement함수를 사용해서 개발하면 되기 때문
+--> 하지만 JSX 코드를 사용했을 때 장점이 매우 많다 (생산성, 가독성 모두 올라간다)
