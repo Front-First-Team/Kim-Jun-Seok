@@ -1,0 +1,75 @@
+
+Props 의 특징 : Props의 중요한 특징은 Read-Only 이다. 읽기 전용 --> 즉, 읽을 수만 있다는 것이다.
+                         읽을 수만 있다는 것은 값을 변경할 수 없다는 말이다.
+                         Props의 값은 React Component 가 Element 을 생성하기 위해서 사용하는 값이다. 그런데 이 값들이 Element 생성하는 도중
+                         갑자기 바뀌어 버리면 제대로된 Element 가 생성될 수 없기 때문이다.
+                         ex) 붕어빵이 다 구워진 이후에 속재료를 바꿀 수 없는 것과 같은 의미이다
+
+    그렇다면 다른 Props 의 값으로 Element 를 생성하려면 어떻게 해야할까?
+    --> 새로운 값을 Component 에 전달하여 새로운 Element 를 생성하면 된다 --> 이 과정에서 Element 가 다시 랜더링 되는 것이다
+
+    모든 리액트 컴포넌트는 Props 를 직접 바꿀 수 없고, 같은 Props 에 대해서는 항상 같은 결과(React Element)를 보여줄것
+    --> 파라미터가 pure 해야 한다 : 같은 입력(Props) 값이 들어오면, 항상 같은 출력(React Element) 값이 나와야 한다
+
+-----------------------------------------------------
+
+Props 사용법 :
+    코드 ex)
+    JSX 사용하는 경우 :
+    function App(props) {
+        return (
+            <Profile
+                name="소플"
+                introduction="안녕하세요, 소플입니다."
+                viewCount={1500}
+            />
+        )
+    }
+    --> 위 코드와 같이 키와 값으로 이루어진 키,값 쌍의 형태로 Component 에 Props 를 넣을 수 있다
+    --> 이 코드에는 App 컴포넌트가 나오고, 그 안에서 Profile 컴포넌트를 사용하고 있다. 여기서 Profile 컴포넌트에
+           name, introduction, viewCount 라는 3가지 속성들을 넣어줬다.
+           여기서 각 속성에 값을 넣을 때 중괄호를 사용한 것과, 그냥 문자열로 넣어준 것은 차이가 있다.
+           --> props 의 값을 넣어줄 때도 문자열 이외에 "정수, 변수, 또는 다른 컴포넌트" 등이 들어갈 경우에는 중괄호를 사용해서 감싸줘야한다
+                  (문자열도 중괄호로 감싸줘도 상관은 없다)
+            --> 이렇게 하면 이 속성의 값들이 모두 Profile 컴포넌트의 props 로 전달되며, props 는 밑의 코드와 같은 "자바스크립트 객체" 의 형태가 된다
+            {
+                name: "소플",
+                introduction: "안녕하세요, 소플입니다.",
+                viewCount: 1500
+            }
+
+
+    Props 에 중괄호를 사용해서 밑의 코드와 같이 Props 의 값으로 컴포넌트도 넣을 수 있다 (컴포넌트의 속성에 컴포넌트를 넣은 것)
+    function App(props) {
+        return (
+            <Layout 
+                width={2560}
+                height={1440}
+                header={
+                    <Header title="소플의 블로그입니다." />
+                }
+                footer={
+                    <Footer />
+                }
+            />
+        )
+    }
+    --> Layout 컴포넌트의 속성으로는 정수값을 가진 width, height 과 React Element 로 Header, footer 가 들어오게 된다
+
+
+    코드 ex)
+    JSX 사용하지 않는 경우(createElement 함수 사용) :
+    React.createElement(
+        Profile,
+        {
+            name: "소플",
+            introduction: "안녕하세요, 소플입니다.",
+            viewCount: 1500
+        },
+        null
+    )
+    --> "type" 은 컴포넌트의 이름인 Profile 이 들어가고, "props" 로는 자바스크립트 객체가 들어갔다,
+           마지막으로 하위 컴포넌트가 없기 때문에 "children" 은 null 이 들어갔다
+
+    ==> React 로 개발을 할 때는 JSX(JavaScript + XML) 사용하는 것이 좋으니, 이 코드는 참고만 하고,
+            실제로 props 를 사용할 때는 맨 위에 나왔던 JSX 형태로 코드를 작성하자
