@@ -7,11 +7,11 @@ React로 웹사이트를 개발할 때에는 주로 create-react-app 이란 것�
 create-react-app (CRA) : 리액트 웹 에플리케이션을 개발하는데 필요한 모든 설정이 되어있는 상태로 프로젝트를 생성해주는 도구
 
 CRA 은 npx 명령어를 통해서 실행할 수 있다
-사용법 : $ npx create-react-app <your-project-name>
+사용법 : $ npx create-react-app <your-project-name>  ex) 생성될 파일 명을 입력해주면 된다
 실제 사용 예제 : $ npx create-react-app my-app
 
 실행한 후에 터미널 마지막 부분을 보면 에플리케이션을 실행할 수 있는 명령어를 친절하게 알려준다
-cd my-app (경로 변경)
+cd my-app (경로 변경)  ex) 파일명을 my-app 으로 작성해줬기에, my-app 폴더로 경로를 이동해주란 의미이다
 npm start (애플리케이션 실행)
 
 --> 명령어를 실행하고 기다리면 자동으로 브라우저가 열리면서 localhost:3000 으로 접속하게 된다
