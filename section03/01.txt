@@ -7,12 +7,12 @@ JSX : 자바스크립트의 확장 문법 (JS 는 자바스크립트를 의미)
 
 JSX 코드 예시 :
     const element = <h1>Hello, world!</h1>;
-    --> 자바스크립트 코드와 HTML 코드가 합쳐있는 JSX 코드가 되는 것이다
+    --> JSX 코드는 자바스크립트 코드와 HTML 코드가 합쳐있는 형태이다
 
 JSX 역할 : 내부적으로 XML HTML 코드를 자바스크립트로 변환하는 과정을 거치게 된다
                 --> 그렇기 때문에 실제로 우리가 JSX 코드를 작성해도, 최종적으로는 JavaScript 코드가 나오게 되는 것이다
 
-                --> JSX 코드를 JavaScript 코드로 변환하는 역할을 하는 것이 React.createElement() 하는 함수이다
+                --> JSX 코드를 JavaScript 코드로 변환하는 역할을 하는 것이 React.createElement() 라는 함수이다
 
 ex)
 JSX를 사용한 코드 :

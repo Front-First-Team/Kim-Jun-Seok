@@ -1,0 +1,226 @@
+
+Hooks : 
+
+    "클래스 컴포넌트" 에서는 생성자에서 state 를 정의하고 setState() 함수를 통해 state 를 업데이트했다. 이것뿐만 아니라
+    클래스 컴포넌트는 컴포넌트의 생명주기 함수들까지 모두 명확하게 정의되어있기 때문에 잘 가져다 쓰기만 하면 된다.
+
+    하지만 "함수 컴포넌트" 는 이와 다르게 코드도 굉장히 간결하고, 별도의 state 를 정의해서 사용하거나 컴포넌트의 생명주기에 맞춰
+    어떤 코드가 실행되도록 할 수 없다
+
+    ==> 따라서 "함수 컴포넌트" 에 이런 기능을 지원하기위해 나온 것이 바로 "Hooks" 이다
+    ==> 훅을 사용하면 함수 컴포넌트도 클래스 컴포넌트의 기능들을 모두 동일하게 사용가능하다
+
+    Hooks : 갈고리라는 의미이다
+
+        원래 존재하는 어떤 기능에, 마치 갈고리를 거는 것처럼 끼워들어가 같이 실행되는 것을 의미한다
+        -->  원하는 시점에 정해진 함수를 실행되도록 만드는 것  -->  이때 실행되는 함수를 "Hooks" 이라고 부른다
+
+        이러한 Hooks 의 이름은 모두 "use" 로 시작한다 (각 기능을 사용하겠다는 의미)
+        --> 이름 앞에 use 를 붙여서 Hooks 이라는 것을 나타내주어야한다 (개발자 마음대로 훅을 커스텀하는 경우도 있다)
+
+
+    대표적인 Hooks 들에 대해서 알아보자
+
+    ------------------------------------------------------------------------------------------------------------------------------
+
+    useState() : 가장 대표적으로 많이 사용되는 useState 훅이다
+                          useState 훅은 state 를 사용하기 위한 훅이다 --> 클래스 컴포넌트처럼 state 를 사용하고 싶으면 useState훅을 사용해야한다
+
+        ex)
+        import React, {useState} from "react"
+
+        function Counter(props) {
+            var count = 0;
+
+            return (
+                <div>
+                    <p>총 {count}번 클릭했습니다.</p>
+                    <button onClick={() => count++}>
+                        클릭
+                    </button>
+                </div>
+            )
+        }
+
+        --> count 를 함수의 변수로 선언해서 사용하게 되면 버튼 클릭시 count 값을 증가시킬 수는 있지만, 재랜더링이 일어나지 않아 새로운 count 값이
+               화면에 표시되지 않게 된다  -->  useState 를 사용하여 state 를 선언하고 업데이트해야 한다
+
+        useState() 사용법 :
+        const [변수명, set함수명] = useState(초기값);
+
+        --> useState를 호출할 때는 파라미터로 선언할 state의 초기값이 들어간다
+                (클래스 컴포넌트의 생성자에서 state 를 선언할 때 초기값을 넣어주는 것과 동일한 것이라고 보면 된다)
+
+        --> 이렇게 초기값을 넣어 useState를 호출하면 return 값으로 배열이 나온다
+        --> return 된 배열에는 두가지 항목이 들어간다 :
+               첫번째 항목 : state로 선언된 변수
+               두번째 항목 : 해당 state 의 set 함수
+
+        실제로 useState 를 사용한 코드 ex)
+        import React, {useState} from "react"
+
+        function Counter(props) {
+            var [count, setCount] = useState(0)
+
+            return (
+                <div>
+                    <p>총 {count}번 클릭했습니다.</p>
+                    <button onClick={() => setCount(count + 1)}>
+                        클릭
+                    </button>
+                </div>
+            )
+        }
+        --> 이 코드는 useState 를 사용하여 count 값을 state 로 관리하도록 만든 것이다
+        --> state 의 변수명과 set 함수가 각각 count, setCount로 되어있는 것을 확인할 수 있다
+
+        ==> 버튼이 눌렸을 때 setCount 함수를 호출해서, count 를 1 증가시킨다. 그리고 count 값이 변경되면 컴포넌트를 재 랜더링되면서
+                화면에 새로운 count 값이 표시된다
+
+                ** 함수 컴포넌트는 변수 각각에 대해 set 함수가 따로 존재한다는 것을 기억하자 **
+
+    ------------------------------------------------------------------------------------------------------------------------------
+
+    useEffect() : Side effect를 수행하기 위한 Hook 이다
+
+        Side effect : 리액트에서의 Side effect 의미는 효과, 영향을 뜻한다
+                              effect 라고 불리는 이유는, 이 작업들이 다른 컴포넌트에 영향을 미칠 수 있으며, 랜더링 중에는 작업이 완료될 수 없기 때문이다
+                              --> 랜더링이 끝난 이후에 실행되어야할 작업들이다
+                              --> 그래서 이런 작업들이 Side 에서 실행된다는 의미에서 Side effect 라고 불린다
+
+                              ==> 즉, useEffect 는 Side effect 를 실행할 수 있게 해주는 Hook 이다
+
+                              ==> useEffect는 클래스 컴포넌트에서 제공하는 생명주기함수인 componentDidMount, componentDidUpdate,
+                                       componentWillUnmount 와 동일한 기능을 하나로 통합해서 제공한다
+
+                                ==> useEffect() 함수로 이러한 생명주기함수와 동일한 기능을 할 수 있다
+
+
+        useEffect() 사용법 : useEffect(이벤트 함수, 의존성 배열);
+
+            첫번째 파라미터로는 "이벤트 함수" 가 들어가고, 두번째 파라미터로는 "의존성 배열" 이 들어간다
+
+            --> "의존성 배열" 은 말그대로 이 이팩트가 의존하고 있는 배열인데, 배열 안에 있는 변수 중에 하나라도 값이 변경되었을 때 이팩트 함수가 실행된다
+            --> 기본적으로 Effect 함수는 처음 컴포넌트가 랜더링 된 이후와, 업데이트로 인한 재랜더링 이후에 실행된다
+
+            ==> 만약 Effect 함수가 mount, unmount 시에 단 한번 실행되게 하고 싶을 시에 코드 ex)
+                     useEffect(이펙트 함수, [ ]);
+
+                     --> 이렇게 "의존성 배열" 에 빈 배열을 넣으면 된다
+                     --> 해당 이펙트가 props 나 state 에 있는 어떤 값에도 의존하지 않는 것이 됨으로 여러번 실행되지 않는다
+
+            ==> 의존성 배열을 생략하면 컴포넌트가 업데이트될 때마다 호출 된다 ex) useEffect(이펙트 함수);
+
+
+            useEffect() 를 사용한 예제 코드 ex)
+            import React, {useState, useEffect} from "react"
+
+            function Counter(props) {
+                var [count, setCount] = useState(0);
+
+                //--> componentDidMount, componentDidUpdate와 같은 생명주기함수의 기능을 동일하게 수행한다
+                useEffect(() => {
+
+                    //--> useEffect 안에 있는 "이펙트 함수" 에서는  브라우저 API를 사용해서 document의 title을 업데이트 합니다
+                    document.title = `You clicked ${count} times`;
+                })
+
+                return (
+                    <div>
+                        <p>총 {count}번 클릭했습니다.</p>
+                        <button onClick={() => setCount(count + 1)}>
+                            클릭
+                        </button>
+                    </div>
+                )
+            }
+            --> document 의 title 은 우리가 브라우저에서 페이지를 열었을 때 창에 표시되는 문자열이다 (브라우저의 탭에 나오는 제목이라고 보면 된다)
+            
+            ==> 이 코드처럼 "의존성 배열" 없이 useEffect() 를 사용하면 리액트는 돔이 변경된 이후에 해당 "이펙트 함수" 를 실행하라는 의미로 받아들인다
+                     그래서 컴포넌트가 처음 랜더링 될 때를 포함해서, 매번 랜더링 될 때마다 이펙트가 실행된다고 보면 된다
+
+                     이 코드의 경우 "이펙트 함수" 가 처음 컴포넌트가 "마운트" 되었을 때 실행되고, 이후 컴포넌트가 "업데이트" 될 때마다 실행된다
+                     --> 결과적으로 componentDidMount , componentDidUpdate 와 동일한 역할을 하게 된다
+
+                     --> 또한 이펙트는 함수 컴포넌트 안에서 선언되기 때문에, 해당 컴포넌트 pops 와 state 에 접근할 수 있다
+
+                     ==> 이 코드에서는 count 라는 state 에 접근하여 해당 값이 포함된 문자열을 생성해서 사용하는 것을 볼 수 있다
+
+            
+            그렇다면 componentWillUnmount 와 동일한 기능은 useEffect 로 어떻게 구현할 수 있을까?
+            ex)
+            import React, {useState, useEffect} from "react";
+
+            function UserStatus(props) {
+                const [isOnline, setIsOnline] = useState(null);
+
+                function handleStatusChange(status) {
+                    setIsOnline(status.isOnline);
+                }
+
+                useEffect(() => {
+                    ServerAPI.subscribeUserStatus(props.user.id, handleStatusChange);
+                    return () => {
+                        ServerAPI.unsubscribeUserStatus(props.user.id, handleStatusChange);
+                    };
+                });
+
+                if(isOnline == null) {
+                    return '대기 중...';
+                }
+                return isOnline ? '온라인' : '오프라인';
+            }
+            --> 이 코드는 useEffect 에서 먼저 서버 API 를 사용하여 사용자의 상태를 구독하고 있다
+            --> 이후 함수를 하나 return 하는데, 해당 함수 안에는 구독을 해제하는 API 를 호출하도록 되어 있다
+            
+            --> useEffect 에서 return 하는 함수는 컴포넌트가 마운트 해제, 즉 unmount 될 때 호출된다
+
+            ==> 결과적으로 useEffect 의 return 함수의 역할은 componentWillUnmount 함수가 하는 역할과 동일하다
+
+            ---------------------------------------
+
+            또한, useEffect 훅은 하나의 컴포넌트에 여러개를 사용할 수 있다
+            두개의 useEffect 훅을 사용하는 예제 코드 ex)
+
+            function UserStatusWithCounter(props) {
+                const [count, setCount] = useState(0);
+                useEffect(() => {
+                    document.title = `총 ${count}번 클릭했습니다.`;
+                })
+
+                const [isOnline, setIsOnline] = useState(null);
+                useEffect(() => {
+                    ServerAPI.subscribeUserStatus(props.user.id, handleStatusChange);
+                    return () => {
+                        ServerAPI.unsubscribeUserStatus(props.user.id, handleStatusChange);
+                    }
+                })
+
+                function handleStatusChange(status) {
+                    setIsOnline(status.isOnline);
+                }
+            }
+            --> useState 와 useEffect 훅을 각각 두개씩 사용하는 것을 볼 수 있다
+
+
+    ------------------------------------------------------------------------------------------------------------------------------
+
+    useEffect 훅 사용법 정리 :
+
+        기본적으로 "이벤트함수" 와 "의존성배열" 이 들어간다
+
+        useEffect(() => {
+            // 컴포넌트가 마운트 된 이후,
+            // 의존성 배열에 있는 변수들 중 하나라도 값이 변경되었을 때 실행됨
+
+            // 의존성 배열에 빈 배열 ([ ]) 을 넣으면 "마운트" 와 "언마운트" 시에 단 한 번씩만 실행됨
+            // 의존성 배열 생략 시 컴포넌트 "업데이트" 시마다 실행됨
+            ...
+
+            return () => {
+                // 컴포넌트가 마운트 해제되기 전에 실행됨
+            }
+        }, [의존성 변수1, 의존성 변수2, ...]);
+
+
+        --> useEffect 는 자주 사용되기에 이 구조를 반드시 익히고 넘어가자
