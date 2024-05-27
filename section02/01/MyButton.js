@@ -16,6 +16,8 @@ ReactDOM.render(React.createElement(MyButton), domContainer)
 //--> 여기서 DOM container 는 root 라는 id 를 가진 div 태그이다
 //--> 이 코드가 필요한 이유는 script를 사용해서 컴포넌트를 가져왔다고 해도 컴포넌트가 화면에 보이는 것이 아니기 때문이다
 
+//--> render()
+
 /*
     이제 다시 브라우저를 열어서 Click here! 버튼을 눌러보면 Clicked! 로 바뀌는 것을 볼 수 있다
     이것은 React Component에서 state가 바뀐 것이다
