@@ -1,0 +1,6 @@
+
+이번에 배울 훅은 useMemo() 훅이다
+
+useMemo() : Memoized value를 리턴하는 Hook 이다
+
+    Memoization : 
